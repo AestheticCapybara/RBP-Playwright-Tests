@@ -1,0 +1,42 @@
+{
+  "blank": "",
+  "validInfo": {
+    "name": "TestName",
+    "firstName": "TestFirstName",
+    "lastName": "TestLastName",
+    "email": "test@email.io",
+    "phone": "00123123123",
+    "subject": "Contact form test",
+    "description": "This is a test of the contact module at automationtesting.online"
+  },
+  "invalidInfo": {
+    "emailNoAt": "testtest.io",
+    "emailNoTLD": "test@test",
+    "phoneShort": "00123",
+    "phoneLong": "00123123123123123123123",
+    "phoneNoNum": "zzabcabcabc",
+    "phoneNoNumShort": "abc"
+  },
+  "alerts": {
+    "bookingForm": {
+      "firstNameBlank": "Firstname should not be blank",
+      "lastNameBlank": "Lastname should not be blank",
+      "lastNameInvalidLength": "size must be between 3 and 30",
+      "phoneBlank": "must not be empty",
+      "phoneInvalidFormat": "size must be between 11 and 21",
+      "emailBlank": "must not be empty",
+      "emailInvalidFormat": "must be a well-formed email address"
+    },
+    "contactForm": {
+      "nameBlank": "Name may not be blank",
+      "emailBlank": "Email may not be blank",
+      "emailInvalidFormat": "must be a well-formed email address",
+      "phoneBlank": "Phone may not be blank",
+      "phoneInvalidFormat": "Phone must be between 11 and 21 characters.",
+      "subjectBlank": "Subject may not be blank",
+      "subjectInvalidFormat": "Subject must be between 5 and 100 characters.",
+      "descriptionBlank": "Message may not be blank",
+      "descriptionInvalidFormat": "Message must be between 20 and 2000 characters."
+    }
+  }
+}

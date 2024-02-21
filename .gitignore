@@ -1,0 +1,7 @@
+.idea/
+restful-booker.iml
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
