@@ -6,19 +6,18 @@ let extendedPage : ExtendedPage;
 
 let mainPage: MainPage;
 
-test.beforeAll(async ({baseURL, request}) => {
-    let response = await request.get(`${baseURL}`);
-    expect(response.status()).toBe(200);
-})
-test.beforeEach(async ({page}) => {
-    extendedPage = new ExtendedPage(page);
-
-    mainPage = new MainPage(page);
-
-    await page.goto('/');
-})
-
 test.describe('Main page tests @mainPage', () => {
+    test.beforeAll(async ({request, baseURL}) => {
+        let response = await request.get(`${baseURL}`);
+        expect(response.status()).toBe(200);
+    })
+    test.beforeEach(async ({page}) => {
+        extendedPage = new ExtendedPage(page);
+        mainPage = new MainPage(page);
+
+        await page.goto('/');
+    })
+
     test('Verify MainPage title', async ({page}) => {
         await expect(page).toHaveTitle("Restful-booker-platform demo");
     })

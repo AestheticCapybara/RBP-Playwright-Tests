@@ -70,7 +70,7 @@ export class BookingForm {
         this._phone = this.page.locator(elements.input.phone);
         this._availableDay = this.page.locator(elements.calendar.availableDay).nth(0);
         this._nextAvailable = this.page.locator(elements.calendar.availableDay).nth(1);
-        this._openBookingButton = this.page.locator(elements.button.openBooking);
+        this._openBookingButton = this.page.locator(elements.button.openBooking).first();
         this._bookButton = this.page.locator(elements.button.book);
         this._cancelButton = this.page.locator(elements.button.cancel);
         this._alert = this.page.locator(elements.alert);
@@ -89,16 +89,5 @@ export class BookingForm {
     }
     specifyAlert(alert: string): Locator {
         return this._alert.locator(`//p[contains(text(), '${alert}')]`);
-    }
-    async REST_clearAllBookings(request: APIRequestContext, baseURL: string | undefined): Promise<void> {
-        let response = await request.get(`${baseURL}booking/?roomid=1`);
-        expect(response.status()).toBe(200);
-
-        const bookings = await response.json();
-
-        for (const booking of bookings.bookings) {
-            response = await request.delete(`${baseURL}booking/${booking.bookingid}`);
-            expect(response.status()).toBe(202);
-        }
     }
 }

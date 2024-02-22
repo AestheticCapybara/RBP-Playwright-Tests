@@ -9,21 +9,18 @@ let extendedPage : ExtendedPage;
 let mainPage: MainPage;
 let contactForm: ContactForm;
 
-test.beforeAll(async ({baseURL, request}) => {
-    let response = await request.get(`${baseURL}`);
-    expect(response.status()).toBe(200);
-})
-test.beforeEach(async ({page}) => {
-    extendedPage = new ExtendedPage(page);
-
-    mainPage = new MainPage(page);
-    contactForm = new ContactForm(page);
-
-    await page.goto('/');
-})
-
 test.describe('Contact form tests @mainPage', () => {
-    test.describe.configure({ mode: 'serial' });
+    test.beforeAll(async ({request, baseURL}) => {
+        let response = await request.get(`${baseURL}`);
+        expect(response.status()).toBe(200);
+    })
+    test.beforeEach(async ({page}) => {
+        extendedPage = new ExtendedPage(page);
+        mainPage = new MainPage(page);
+        contactForm = new ContactForm(page);
+
+        await page.goto('/');
+    })
 
     test('Verify contact form visible', async () => {
         await expect(contactForm.formContainer).toBeVisible();
@@ -84,7 +81,13 @@ test.describe('Contact form tests @mainPage', () => {
             await expect(contactForm.specifyAlert(helpers.alerts.contactForm.emailBlank)).toBeVisible();
         })
         test('Case: No @', async() => {
-            await contactForm.email.fill(helpers.invalidInfo.emailNoAt);
+            await contactForm.fillAllFields(
+                helpers.validInfo.name,
+                helpers.invalidInfo.emailNoAt,
+                helpers.validInfo.phone,
+                helpers.validInfo.subject,
+                helpers.validInfo.description
+            );
             await extendedPage.clickOn(contactForm.submitButton);
 
             await expect(contactForm.alert).toBeVisible();
@@ -93,7 +96,13 @@ test.describe('Contact form tests @mainPage', () => {
         })
         /* POSSIBLE DEFECT: Email passes verification when no TLD.
         test('Case: No TLD', async() => {
-            await contactForm.email.fill(helpers.invalidInfo.emailNoTLD);
+            await contactForm.fillAllFields(
+                helpers.validInfo.name,
+                helpers.invalidInfo.emailNoTLD,
+                helpers.validInfo.phone,
+                helpers.validInfo.subject,
+                helpers.validInfo.description
+            );
             await extendedPage.clickOn(contactForm.submitButton);
 
             await expect(contactForm.alert).toBeVisible();
@@ -118,7 +127,13 @@ test.describe('Contact form tests @mainPage', () => {
             await expect(contactForm.specifyAlert(helpers.alerts.contactForm.phoneBlank)).toBeVisible();
         })
         test('Case: Too short', async() => {
-            await contactForm.phone.fill(helpers.invalidInfo.phoneShort);
+            await contactForm.fillAllFields(
+                helpers.validInfo.name,
+                helpers.validInfo.email,
+                helpers.invalidInfo.phoneShort,
+                helpers.validInfo.subject,
+                helpers.validInfo.description
+            );
             await extendedPage.clickOn(contactForm.submitButton);
 
             await expect(contactForm.alert).toBeVisible();
@@ -126,7 +141,13 @@ test.describe('Contact form tests @mainPage', () => {
             await expect(contactForm.specifyAlert(helpers.alerts.contactForm.phoneBlank)).not.toBeVisible();
         })
         test('Case: Too long', async() => {
-            await contactForm.phone.fill(helpers.invalidInfo.phoneLong);
+            await contactForm.fillAllFields(
+                helpers.validInfo.name,
+                helpers.validInfo.email,
+                helpers.invalidInfo.phoneLong,
+                helpers.validInfo.subject,
+                helpers.validInfo.description
+            );
             await extendedPage.clickOn(contactForm.submitButton);
 
             await expect(contactForm.alert).toBeVisible();
@@ -135,7 +156,13 @@ test.describe('Contact form tests @mainPage', () => {
         })
         /* POSSIBLE DEFECT: Phone number passes validation when non-numeral.
         test('Case: No numbers', async() => {
-            await contactForm.contactPhone.fill(helpers.invalidInfo.phoneNoNum);
+            await contactForm.fillAllFields(
+                helpers.validInfo.name,
+                helpers.validInfo.email,
+                helpers.invalidInfo.phoneNoNum,
+                helpers.validInfo.subject,
+                helpers.validInfo.description
+            );
             await extendedPage.clickOn(contactForm.submitButton);
 
             await expect(contactForm.alert).toBeVisible();
@@ -144,7 +171,13 @@ test.describe('Contact form tests @mainPage', () => {
         })
          */
         test('Case: Too short + no numbers', async() => {
-            await contactForm.phone.fill(helpers.invalidInfo.phoneNoNumShort);
+            await contactForm.fillAllFields(
+                helpers.validInfo.name,
+                helpers.validInfo.email,
+                helpers.invalidInfo.phoneNoNumShort,
+                helpers.validInfo.subject,
+                helpers.validInfo.description
+            );
             await extendedPage.clickOn(contactForm.submitButton);
 
             await expect(contactForm.alert).toBeVisible();
@@ -168,7 +201,13 @@ test.describe('Contact form tests @mainPage', () => {
             await expect(contactForm.specifyAlert(helpers.alerts.contactForm.subjectBlank)).toBeVisible();
         })
         test('Case: Too short', async() => {
-            await contactForm.subject.fill(await extendedPage.generateRandomString(4));
+            await contactForm.fillAllFields(
+                helpers.validInfo.name,
+                helpers.validInfo.email,
+                helpers.validInfo.phone,
+                await extendedPage.generateRandomString(4),
+                helpers.validInfo.description
+            );
             await extendedPage.clickOn(contactForm.submitButton);
 
             await expect(contactForm.alert).toBeVisible();
@@ -176,7 +215,13 @@ test.describe('Contact form tests @mainPage', () => {
             await expect(contactForm.specifyAlert(helpers.alerts.contactForm.subjectBlank)).not.toBeVisible();
         })
         test('Case: Too long', async() => {
-            await contactForm.subject.fill(await extendedPage.generateRandomString(101));
+            await contactForm.fillAllFields(
+                helpers.validInfo.name,
+                helpers.validInfo.email,
+                helpers.validInfo.phone,
+                await extendedPage.generateRandomString(101),
+                helpers.validInfo.description
+            );
             await extendedPage.clickOn(contactForm.submitButton);
 
             await expect(contactForm.alert).toBeVisible();
@@ -200,7 +245,13 @@ test.describe('Contact form tests @mainPage', () => {
             await expect(contactForm.specifyAlert(helpers.alerts.contactForm.descriptionBlank)).toBeVisible();
         })
         test('Case: Too short', async() => {
-            await contactForm.description.fill(await extendedPage.generateRandomString(19));
+            await contactForm.fillAllFields(
+                helpers.validInfo.name,
+                helpers.validInfo.email,
+                helpers.validInfo.phone,
+                helpers.validInfo.subject,
+                await extendedPage.generateRandomString(19)
+            );
             await extendedPage.clickOn(contactForm.submitButton);
 
             await expect(contactForm.alert).toBeVisible();
@@ -208,7 +259,13 @@ test.describe('Contact form tests @mainPage', () => {
             await expect(contactForm.specifyAlert(helpers.alerts.contactForm.descriptionBlank)).not.toBeVisible();
         })
         test('Case: Too long', async() => {
-            await contactForm.description.fill(await extendedPage.generateRandomString(2001));
+            await contactForm.fillAllFields(
+                helpers.validInfo.name,
+                helpers.validInfo.email,
+                helpers.validInfo.phone,
+                helpers.validInfo.subject,
+                await extendedPage.generateRandomString(2001)
+            );
             await extendedPage.clickOn(contactForm.submitButton);
 
             await expect(contactForm.alert).toBeVisible();
