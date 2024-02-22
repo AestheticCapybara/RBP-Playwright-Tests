@@ -9,36 +9,21 @@ let extendedPage : ExtendedPage;
 let mainPage: MainPage;
 let bookingForm: BookingForm;
 
-test.beforeAll(async ({baseURL, request}) => {
-    let response = await request.get(`${baseURL}`);
-    expect(response.status()).toBe(200);
-})
-test.beforeEach(async ({page, baseURL, request}) => {
-    let response = await request.post(`${baseURL}auth/login`, {
-        data: {
-            "username": "admin",
-            "password": "password"
-        }
-    });
-    expect(response.status()).toBe(200);
-
-    extendedPage = new ExtendedPage(page);
-
-    mainPage = new MainPage(page);
-    bookingForm = new BookingForm(page);
-
-    await page.goto('/');
-})
-test.afterEach(async({baseURL, request}) => {
-    await bookingForm.REST_clearAllBookings(request, baseURL);
-})
-
 test.describe('Booking form tests @mainPage', () => {
-    test.describe.configure({ mode: 'serial' });
+    test.beforeAll(async ({request, baseURL}) => {
+        let response = await request.get(`${baseURL}`);
+        expect(response.status()).toBe(200);
+    })
+    test.beforeEach(async ({page, request, baseURL}) => {
+        extendedPage = new ExtendedPage(page);
+        mainPage = new MainPage(page);
+        bookingForm = new BookingForm(page);
 
-    test('DEBUG calendar dragging', async() => {
-        await extendedPage.clickOn(bookingForm.openBookingButton);
-        await extendedPage.dragFromTo(bookingForm.availableDay, bookingForm.nextAvailable);
+        await extendedPage.REST_authLogin(request, baseURL)
+        await page.goto('/');
+    })
+    test.afterEach(async({request, baseURL}) => {
+        await extendedPage.REST_bookingClearAll(request, baseURL);
     })
 
     test('Verify booking form reveal func', async() => {
@@ -48,7 +33,9 @@ test.describe('Booking form tests @mainPage', () => {
         await expect(bookingForm.phone).not.toBeVisible();
         await expect(bookingForm.bookButton).not.toBeVisible();
         await expect(bookingForm.cancelButton).not.toBeVisible();
+
         await extendedPage.clickOn(bookingForm.openBookingButton);
+
         await expect(bookingForm.firstName).toBeVisible();
         await expect(bookingForm.lastName).toBeVisible();
         await expect(bookingForm.email).toBeVisible();
@@ -117,6 +104,7 @@ test.describe('Booking form tests @mainPage', () => {
                 helpers.blank,
                 helpers.validInfo.phone
             );
+            await extendedPage.dragFromTo(bookingForm.availableDay, bookingForm.nextAvailable);
             await extendedPage.clickOn(bookingForm.bookButton);
 
             await expect(bookingForm.alert).toBeVisible();
@@ -130,13 +118,14 @@ test.describe('Booking form tests @mainPage', () => {
                 helpers.invalidInfo.emailNoAt,
                 helpers.validInfo.phone
             );
+            await extendedPage.dragFromTo(bookingForm.availableDay, bookingForm.nextAvailable);
             await extendedPage.clickOn(bookingForm.bookButton);
 
             await expect(bookingForm.alert).toBeVisible();
             await expect(bookingForm.specifyAlert(helpers.alerts.contactForm.emailInvalidFormat)).toBeVisible();
             await expect(bookingForm.specifyAlert(helpers.alerts.contactForm.emailBlank)).not.toBeVisible();
         })
-        /* POSSIBLE DEFECT: Email passes verification when no TLD.
+        // POSSIBLE DEFECT: Email passes verification when no TLD.
         test('Case: No TLD', async() => {
             await extendedPage.clickOn(bookingForm.openBookingButton);
             await bookingForm.fillAllFields(
@@ -145,13 +134,13 @@ test.describe('Booking form tests @mainPage', () => {
                 helpers.invalidInfo.emailNoTLD,
                 helpers.validInfo.phone
             );
+            await extendedPage.dragFromTo(bookingForm.availableDay, bookingForm.nextAvailable);
             await extendedPage.clickOn(bookingForm.bookButton);
 
-            await expect(bookingForm.alert).toBeVisible();
-            await expect(bookingForm.specifyAlert(helpers.alerts.contactForm.emailInvalidFormat)).toBeVisible();
+            await expect(bookingForm.alert).not.toBeVisible();
+            await expect(bookingForm.specifyAlert(helpers.alerts.contactForm.emailInvalidFormat)).not.toBeVisible();
             await expect(bookingForm.specifyAlert(helpers.alerts.contactForm.emailBlank)).not.toBeVisible();
         })
-         */
     })
 
     test.describe('Verify with invalid phone number', async() => {
@@ -199,7 +188,7 @@ test.describe('Booking form tests @mainPage', () => {
             await expect(bookingForm.specifyAlert(helpers.alerts.bookingForm.phoneInvalidFormat)).toBeVisible();
             await expect(bookingForm.specifyAlert(helpers.alerts.bookingForm.phoneBlank)).not.toBeVisible();
         })
-        /* POSSIBLE DEFECT: Phone number passes verification when non-numeral.
+        // POSSIBLE DEFECT: Phone number passes verification when non-numeral.
         test('Case: No numbers', async() => {
             await extendedPage.clickOn(bookingForm.openBookingButton);
             await bookingForm.fillAllFields(
@@ -211,11 +200,10 @@ test.describe('Booking form tests @mainPage', () => {
             await extendedPage.dragFromTo(bookingForm.availableDay, bookingForm.nextAvailable);
             await extendedPage.clickOn(bookingForm.bookButton);
 
-            await expect(bookingForm.alert).toBeVisible();
-            await expect(bookingForm.specifyAlert(helpers.alerts.bookingForm.phoneInvalidFormat)).toBeVisible();
+            await expect(bookingForm.alert).not.toBeVisible();
+            await expect(bookingForm.specifyAlert(helpers.alerts.bookingForm.phoneInvalidFormat)).not.toBeVisible();
             await expect(bookingForm.specifyAlert(helpers.alerts.bookingForm.phoneBlank)).not.toBeVisible();
         })
-        */
         test('Case: Too short + no numbers', async() => {
             await extendedPage.clickOn(bookingForm.openBookingButton);
             await bookingForm.fillAllFields(
