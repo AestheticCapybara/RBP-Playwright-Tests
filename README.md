@@ -1,8 +1,10 @@
 # Restful-Booker-Platform Playwright Tests
-## Automated functionality tests for restful-booker demo site
+![Static Badge](https://img.shields.io/badge/Frameworks-Playwright-darkgreen)
+![Static Badge](https://img.shields.io/badge/Language-TypeScript-blue)
 
----
-### Credits:
+Automated functionality tests for restful-booker demo site.
+
+## Credits:
 
 Demo site URL: https://automationintesting.online/
 
