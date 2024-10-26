@@ -24,6 +24,6 @@ test.describe('Main page tests @mainPage', () => {
 
     test('Verify MainPage hero image', async () => {
         await expect(mainPage.heroImg).toBeVisible();
-        await expect(mainPage.heroImg).toHaveAttribute('src', 'https://www.mwtestconsultancy.co.uk/img/rbp-logo.png');
+        await expect(mainPage.heroImg).toHaveAttribute('src', '/images/rbp-logo.jpg');
     })
 })

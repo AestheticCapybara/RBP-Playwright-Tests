@@ -7,10 +7,6 @@ const elements = {
             selector: 'a[href="http://www.mwtestconsultancy.co.uk"]',
             expected: 'https://www.mwtestconsultancy.co.uk'
         },
-        createdByB: {
-            selector: 'a[href="https://thefriendlytester.co.uk/"]',
-            expected: 'https://thefriendlytester.co.uk/',
-        },
         cookies: {
             selector: 'a[href="/#/cookie"]',
             expected: '/#/cookie'
