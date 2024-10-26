@@ -1,15 +1,26 @@
 {
   "name": "restful-booker",
-  "version": "1.0.0",
-  "description": "",
+  "version": "1.0.1",
+  "description": "Automated functionality tests for restful-booker demo site.",
   "main": "index.js",
-  "scripts": {},
-  "keywords": [],
-  "author": "",
+  "scripts": {
+    "test": "npx playwright test"
+  },
+  "keywords": [
+    "TypeScript",
+    "playwright",
+    "functionality testing",
+    "automated tests"
+  ],
+  "author": "Aesthetic Capybara",
   "license": "ISC",
   "devDependencies": {
     "@playwright/test": "^1.41.2",
     "@types/node": "^20.11.19",
     "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "axios": "^1.7.7",
+    "dotenv": "^16.4.5"
   }
 }

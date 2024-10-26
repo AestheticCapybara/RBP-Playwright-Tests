@@ -22,7 +22,7 @@ test.describe('Main page tests @mainPage', () => {
         await expect(page).toHaveTitle("Restful-booker-platform demo");
     })
 
-    test ('Verify MainPage hero image', async () => {
+    test('Verify MainPage hero image', async () => {
         await expect(mainPage.heroImg).toBeVisible();
         await expect(mainPage.heroImg).toHaveAttribute('src', 'https://www.mwtestconsultancy.co.uk/img/rbp-logo.png');
     })
