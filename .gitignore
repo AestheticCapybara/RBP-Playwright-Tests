@@ -1,8 +1,11 @@
-.idea/
-restful-booker.iml
-results.png
 node_modules/
+
 /test-results/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+.idea/
+restful-booker.iml
+
+.env
